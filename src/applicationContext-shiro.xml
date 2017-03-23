@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd"
+	default-lazy-init="true">
+	
+	<description>Shiro 安全配置</description>  
+
+	<!-- 自定义的 Realm 
+		直接配置实现了realm接口的bean
+		-->
+	<bean id="realm" class="com.njy.shiro.realms.ShiroRealm">
+		<!-- <property name="userService" ref="userService"></property> -->
+	</bean>
+	
+	<!-- 用户授权信息 Cache, 采用 EhCache -->
+	<bean id="shiroEhCacheManager" class="org.apache.shiro.cache.ehcache.EhCacheManager">
+		<property name="cacheManagerConfigFile" value="classpath:ehcache-shiro.xml"></property>
+	</bean>
+
+	<!-- 配置 SecurityManager -->
+	<bean id="securityManager" 
+		class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+		<property name="realm" ref="realm"></property>
+		<property name="cacheManager" ref="shiroEhCacheManager"></property>
+	</bean>
+	
+	<!--4.  配置保证 Shiro 内部 Bean 声明周期都得到执行的 Lifecycle Bean 后置处理器
+			可以自动的来调用配置在Spring IOC容器中的shiro bean的生命周期方法 -->
+	<bean id="lifecycleBeanPostProcessor" 
+		class="org.apache.shiro.spring.LifecycleBeanPostProcessor"></bean>
+	
+	<!--5. AOP 式方法级权限检查 -->
+	<!-- 为了支持 Shiro 的注释, 按官方文档的要求 -->
+	<bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator" 
+		depends-on="lifecycleBeanPostProcessor">
+		<property name="proxyTargetClass" value="true"></property>
+	</bean>
+	
+	<bean class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">
+		<property name="securityManager" ref="securityManager"></property>
+	</bean>
+	
+	<!--6. Shiro Filter 
+		6.1 id必须和web.xml 配置文件中的 <filter> 一致
+		-->
+	<bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+		<property name="securityManager" ref="securityManager"></property>
+		<property name="loginUrl" value="/login.jsp"></property>
+		<property name="successUrl" value="/list.jsp"></property>
+		<property name="unauthorizedUrl" value="/unauthorized.jsp"/>
+		<property name="filterChainDefinitions">
+		<!-- 
+			配置哪些页面需要受保护，以及访问这些页面需要的权限
+			1）。action 可以被匿名访问
+			2).authc 必须认证（即登录）后才能访问的页面
+		 -->
+			<value>
+				/login.jsp = anon
+				 # everything else requires authentication:
+                /** = authc
+				<!-- /login.jsp = authc
+				/logout = logout
+				/static/** = anon
+				
+				/role/** = roles[role]
+				/user/** = roles[user]
+				/chance/** = roles[chance]
+				/plan/** = roles[plan]
+				/dict/** = roles[dict]
+				/product/** = roles[product]
+				/storage/** = roles[storage]
+				/customer/** = roles[customer]
+				/contact/** = roles[customer]
+				
+				/** = user -->
+			</value>
+		</property>
+	</bean>
+
+</beans>
