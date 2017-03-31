@@ -57,8 +57,12 @@
 		 -->
 			<value>
 				/login.jsp = anon
+				 <!-- /list.jsp = anon -->
 				 # everything else requires authentication:
                 /** = authc
+               <!--  /list.jsp = anon list顺序位置不同，效果不同，支持第一次识别-->
+               
+               
 				<!-- /login.jsp = authc
 				/logout = logout
 				/static/** = anon
