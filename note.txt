@@ -1,0 +1,21 @@
+1.获取当前的subject,调用SecurityUtils.getSubject()
+        Subject currentUser = SecurityUtils.getSubject();
+        
+2. 测试当前用户是否被认证即是否已经登录
+		currentUser.isAuthenticated()
+		
+3.若没有被认证，则把用户名和密码封装为UsernamePasswordToken对象
+            UsernamePasswordToken token = new UsernamePasswordToken("lonestarr", "vespa");
+1).创建一个表单页页面
+2)发请求提交到SpringMVC 的 Hendler
+3)获取用户名和密码
+
+4.执行登录，调用currentUser.login((AuthenticationToken);方法
+UsernamePasswordToken token = new UsernamePasswordToken("lonestarr", "vespa");
+UsernamePasswordToken是AuthenticationToken的一个实现类
+
+5.自定义Realm 的方法，从数据库中获取对应的记录，返回给shiro。
+1）.实现 Realm 接口
+2）.继承getAuthenticationInfo(AuthenticationToken arg0) 方法
+
+6.由shiro完成密码比对
