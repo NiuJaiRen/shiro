@@ -13,9 +13,14 @@
 	default-lazy-init="true">
 
 	<!-- 开启controller注解支持 -->
-	<context:component-scan base-package="com.njy.shiro">
+	<context:component-scan base-package="com.njy.shiro"
+		use-default-filters="false">
+		 <context:include-filter type="annotation"
+			expression="org.springframework.stereotype.Controller" /> 
 	</context:component-scan>
 
+	<!-- 会自动注册了validator ConversionService -->
+	<mvc:annotation-driven/>
 
 	<mvc:default-servlet-handler />
 	<mvc:resources mapping="/static/**" location="/WEB-INF/static/" />

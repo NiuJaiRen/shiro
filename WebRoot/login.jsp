@@ -16,13 +16,20 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<meta http-equiv="expires" content="0">    
 	<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
 	<meta http-equiv="description" content="This is my page">
-	<!--
-	<link rel="stylesheet" type="text/css" href="styles.css">
-	-->
 
   </head>
   
   <body>
     <h4>login.jsp</h4>
+    <form action="shiro/login" method="post">
+    	username : <input type="text" name = "username"/>
+    	<br><br>
+    	password : <input type="password" name = "password"/>
+    	<br><br>
+    	<input type="submit" value="submit"/>
+    	<br><br>
+    	记住我 ： <input type="checkbox" name="remeberMe" id="remeberMe" value="yes"/>
+    </form>
+    	
   </body>
 </html>

@@ -1,3 +1,19 @@
+1.授权需要继承AuthorizingRealm，并实现doGetAuthorizationInfo 方法
+2.AuthorizingRealm 继承自AuthenticatingRealm，但是没有实现doGetAuthorizationInfo方法，所以需要认证只要继承AuthorizingRealm就好，同时实现两个抽象方法。
+
+1.为什么使用MD5加密
+2.如何做到：
+1）在doGetAuthenticationInfo方法返回值创建对象时候，创建new SimpleAuthenticationInfo(principal, credentials, credentialsSalt, realmName);构造器
+2）使用ByteSource.Util.bytes();来计算盐值
+3）盐值需要唯一，一般使用用户名
+4）使用new SimpleAuthenticationInfo(principal, credentials, credentialsSalt, realmName);计算加密后的值
+
+1.如何把一个字符串加密成md5
+2.替换当前AuthenticatingRealm 的 CredentialsMatcher属性。直接使用 HashCredentialsMatcher 对象，并设置加密属性算法。
+
+密码比对：
+通过AuthenticatingRealm 的 CredentialsMatcher属性进行比对！
+
 1.获取当前的subject,调用SecurityUtils.getSubject()
         Subject currentUser = SecurityUtils.getSubject();
         

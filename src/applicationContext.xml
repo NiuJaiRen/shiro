@@ -14,5 +14,12 @@
 		default-lazy-init="true">
 
 	<description>Spring 公共配置</description>
-	
+	<!-- 使用 annotation 自动注册 bean, 并检查 @Required, @Autowired 的属性已被注入 -->
+	<context:component-scan base-package="com.njy.shiro">
+		<!-- 不扫描 @Controller 和 @ControllerAdvice 注解的 Bean. 这个两个注解交由 SpringMVC 进行扫描 -->
+		<context:exclude-filter type="annotation"
+			expression="org.springframework.stereotype.Controller" />
+		<context:exclude-filter type="annotation"
+			expression="org.springframework.web.bind.annotation.ControllerAdvice" />
+	</context:component-scan>
 </beans>
